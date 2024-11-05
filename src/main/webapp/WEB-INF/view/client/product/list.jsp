@@ -40,6 +40,10 @@
             pointer-events: none;
             background-color: var(--bs-pagination-disabled-bg);
         }
+
+        #btnClear:hover{
+            color: red !important;
+        }
     </style>
 </head>
 
@@ -73,6 +77,11 @@
                         <div class="row g-4">
                             <div class="col-12" id="factoryFilter">
                                 <div class="mb-2"><b>Hãng sản xuất</b></div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="factory-0"
+                                        value="">
+                                    <label class="form-check-label" for="factory-0">Tất cả</label>
+                                </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="factory-1"
                                         value="APPLE">
@@ -110,6 +119,11 @@
                             <div class="col-12" id="targetFilter">
                                 <div class="mb-2"><b>Mục đích sử dụng</b></div>
                                 <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="target-0"
+                                        value="">
+                                    <label class="form-check-label" for="target-0">Tất cả</label>
+                                </div>
+                                <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="target-1"
                                         value="GAMING">
                                     <label class="form-check-label" for="target-1">Gaming</label>
@@ -144,6 +158,11 @@
                                 <div class="mb-2"><b>Mức giá</b></div>
 
                                 <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="price-0"
+                                        value="">
+                                    <label class="form-check-label" for="price-0">Tất cả</label>
+                                </div>
+                                <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="price-2"
                                         value="duoi-10-trieu">
                                     <label class="form-check-label" for="price-2">Dưới 10 triệu</label>
@@ -169,7 +188,7 @@
                                     <label class="form-check-label" for="price-5">Trên 20 triệu</label>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-12" id="sortBy">
                                 <div class="mb-2"><b>Sắp xếp</b></div>
 
                                 <div class="form-check form-check-inline">
@@ -186,14 +205,17 @@
 
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="sort-3" checked
-                                        value="gia-nothing" name="radio-sort">
+                                        value="" name="radio-sort">
                                     <label class="form-check-label" for="sort-3">Không sắp xếp</label>
                                 </div>
 
                             </div>
-                            <div class="col-12">
+                            <div class="col-12 row gap-3 mt-3">
+                                <button class="btn border-secondary fs-6 rounded-pill px-2 py-2 text-primary text-uppercase col" id="btnClear">
+                                    Xoá tất cả
+                                </button>
                                 <button
-                                    class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4"
+                                    class="btn border-secondary rounded-pill px-2 py-2 text-primary text-uppercase col"
                                     id="btnFilter">
                                     Lọc Sản Phẩm
                                 </button>

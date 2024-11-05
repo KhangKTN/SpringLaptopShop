@@ -19,6 +19,8 @@ import vn.khangktn.laptopshop.service.CustomUserDetailService;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
+    private final int SECOND_OF_DAY = 24 * 60 * 60;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,6 +45,7 @@ public class SecurityConfiguration {
     SpringSessionRememberMeServices rememberMeServices() {
         SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
         rememberMeServices.setAlwaysRemember(true);
+        rememberMeServices.setValiditySeconds(7 * SECOND_OF_DAY);
         return rememberMeServices;
     }
 

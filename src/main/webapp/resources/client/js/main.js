@@ -129,7 +129,6 @@
     });
 
 
-
     // Product Quantity
     $('.quantity button').on('click', function () {
         let change = 0;
@@ -191,9 +190,10 @@
         }
     });
 
+    // User to format currency VND
     function formatCurrency(value) {
         // Use the 'vi-VN' locale to format the number according to Vietnamese currency format
-        // and 'VND' as the currency type for Vietnamese đồng
+        // and 'VND' as the currency type for VietNam
         const formatter = new Intl.NumberFormat('vi-VN', {
             style: 'decimal',
             minimumFractionDigits: 0, // No decimal part for whole numbers
@@ -205,19 +205,106 @@
         return formatted;
     }
 
-    $('#btnFilter').on('click', function () {
-        let brandList = []
-        $('#factoryFilter input:checked').each(function () {
-            brandList.push($(this).val())
-        })
-        // console.log(brandList.join(','));
 
-        let queryParam = ''
-        if(brandList.length > 0) {
-            queryParam += `brand=${brandList.join(',')}`
+    // Handle search param from URL
+    function setQueryParam() {
+        // Get search param
+        const urlParams = new URLSearchParams(window.location.search);
+        let brandList = urlParams.get('brand')?.split(',') || []
+        let targetList = urlParams.get('target')?.split(',')  || []
+        let priceList = urlParams.get('price')?.split(',') || []
+        let sortBy = urlParams.get('sortBy') || ''
+
+        if (brandList.length > 0) {
+            $('#factoryFilter input').each(function () {
+                if (brandList.includes($(this).val())) {
+                    $(this).prop('checked', true)
+                }
+            })
+        } else {
+            $('#factoryFilter input').first().prop('checked', true)
         }
-        queryParam = '?' + queryParam
-        window.location.replace(window.location.href + queryParam)
+        if (targetList.length > 0) {
+            $('#targetFilter input').each(function () {
+                if (targetList.includes($(this).val())) {
+                    $(this).prop('checked', true)
+                }
+            })
+        } else {
+            $('#targetFilter input').first().prop('checked', true)
+        }
+        if (priceList.length > 0) {
+            $('#priceFilter input').each(function () {
+                if (priceList.includes($(this).val())) {
+                    $(this).prop('checked', true)
+                }
+            })
+        } else {
+            $('#priceFilter input').first().prop('checked', true)
+        }
+        $(`#sortBy input[name="radio-sort"]`).val([sortBy])
+
+        $('input[type=checkbox]').change(function () {
+            const checkbox = $(this)
+            if (checkbox.val() !== '') {
+                $(this).parent().siblings('.form-check').first().find('input').prop('checked', false)
+            }
+        })
+
+        // Set search param on URL when click filter
+        $('#btnFilter').on('click', function () {
+            brandList = []
+            targetList = []
+            priceList = []
+            $('#factoryFilter input:checked').each(function () {
+                const value = $(this).val()
+                if (value.length !== 0) {
+                    brandList.push(value)
+                }
+            })
+    
+            $('#targetFilter input:checked').each(function () {
+                const value = $(this).val()
+                if (value.length !== 0) {
+                    targetList.push(value)
+                }
+            })
+    
+            $('#priceFilter input:checked').each(function () {
+                const value = $(this).val()
+                if (value.length !== 0) {
+                    priceList.push(value)
+                }
+            })
+
+            let queryParam = []
+            const sortValue = $('#sortBy input:checked').val()
+            if (brandList.length > 0) {
+                queryParam.push(`brand=${brandList.join(',')}`)
+            }
+            if (targetList.length > 0) {
+                queryParam.push(`target=${targetList.join(',')}`)
+            }
+            if (priceList.length > 0) {
+                queryParam.push(`price=${priceList.join(',')}`)
+            }
+            if (sortValue !== '') {
+                queryParam.push(`sortBy=${sortValue}`)
+            }
+
+            let queryUrl = window.location.href.split('?')[0]
+            if (queryParam.length > 0) {
+                queryUrl += `?${queryParam.join('&')}`
+            }
+            window.location.replace(queryUrl)
+        })
+    }
+    setQueryParam()
+
+
+    // Button reset filter
+    $('#btnClear').click(function () {
+        window.location.replace(window.location.href.split('?')[0])
     })
 
 })(jQuery);
