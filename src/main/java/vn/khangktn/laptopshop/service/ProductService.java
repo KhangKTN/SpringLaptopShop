@@ -1,6 +1,7 @@
 package vn.khangktn.laptopshop.service;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,10 +25,26 @@ public class ProductService {
     @Autowired UploadService uploadService;
     @Autowired ProductSpecification productSpecification;
 
+    Random rand = new Random();
+
+    public Product getById(Long id){
+        return productRepository.findById(id).orElse(null);
+    }
+
+    public Product getBySlug(String slug) {
+        return productRepository.findBySlug(slug);
+    }
+
+    public int generateQuantity() {
+        // Obtain a number between [0 - 49].
+        return rand.nextInt(50) + 1;
+    }
+
     public boolean createProduct(Product product, MultipartFile file){
         if(!file.isEmpty()){
             product.setImage(uploadService.handleSaveUploadFile(file, "product"));
         }
+        product.setQuantity(generateQuantity());
         return productRepository.save(product).getId() > 0;
     }
 
@@ -74,10 +91,6 @@ public class ProductService {
         }
         
         return productRepository.findAll(spec, pageable);
-    }
-
-    public Product getById(Long id){
-        return productRepository.findById(id).orElse(null);
     }
 
     public boolean updateProduct(Product product, MultipartFile file){

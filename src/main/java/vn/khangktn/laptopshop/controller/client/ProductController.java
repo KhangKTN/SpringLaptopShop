@@ -18,9 +18,13 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @GetMapping("/product/{id}")
-    public String getPageDetalProduct(@PathVariable Long id, Model model) {
-        model.addAttribute("product", productService.getById(id));
+    @GetMapping("/product/{slugId}")
+    public String getPageDetalProduct(@PathVariable("slugId") String slug, Model model) throws Exception {
+        Product product = productService.getBySlug(slug);
+        if (product == null) {
+            throw new Exception("");
+        }
+        model.addAttribute("product", product);
         return "client/product/detail";
     }
 

@@ -9,9 +9,13 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import vn.khangktn.laptopshop.domain.Product;
+import java.util.List;
+
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+    Product findBySlug(String slug);
+
     @NonNull
     Page<Product> findAll(@NonNull Pageable pageable);
 

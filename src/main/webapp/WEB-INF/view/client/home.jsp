@@ -96,8 +96,7 @@
                                                 </div>
                                                 <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
                                                 <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                    <h5><a href="/product/${product.id}">${product.name}</a></h5>
-                                                    <p>${product.shortDesc}</p>
+                                                    <h5><a href="/product/${product.slug}">${product.name}</a></h5>
                                                     <div class="d-flex flex-column align-items-center">
                                                         <p class="text-dark fs-5 fw-bold mb-0 text-center"><fmt:formatNumber value="${product.price}" currencySymbol="$" type="currency" minFractionDigits="0"/></p>
                                                         <form action="/add-to-cart/${product.id}" method="post">

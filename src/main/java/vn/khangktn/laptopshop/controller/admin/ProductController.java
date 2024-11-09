@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
+import vn.khangktn.laptopshop.constant.DefaultMessageConstant;
+import vn.khangktn.laptopshop.constant.ProductSelectConstant;
 import vn.khangktn.laptopshop.domain.Product;
 import vn.khangktn.laptopshop.service.ProductService;
 import vn.khangktn.laptopshop.util.PagingUtil;
@@ -46,13 +49,27 @@ public class ProductController {
 
     @GetMapping("create")
     public String getCreateProductPage(Model model) {
-        model.addAttribute("newProduct", new Product());
+        model.addAttribute("product", new Product());
+        setModelCreate(model);
         return "admin/product/create";
     }
 
     @PostMapping("create")
-    public String postMethodName(@ModelAttribute() Product product, @RequestParam("productImg") MultipartFile file, Model model) {
-        productService.createProduct(product, file);
+    public String createProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
+        @RequestParam("productImg") MultipartFile file, Model model)
+    {
+        if (file.isEmpty()) {
+            bindingResult.addError(new FieldError("productImg", "image", "Image is required!"));
+        }
+        if (bindingResult.hasErrors()) {
+            setModelCreate(model);
+            if (!file.isEmpty()) {
+                model.addAttribute("imageFile", file);
+            }
+            return "admin/product/create";
+        }
+        boolean isSuccess = productService.createProduct(product, file);
+        model.addAttribute("message", isSuccess ? DefaultMessageConstant.CREATE_PRODUCT_SUCCESS : DefaultMessageConstant.CREATE_PRODUCT_FAIL);
         return "redirect:/admin/product/create";
     }
 
@@ -74,4 +91,11 @@ public class ProductController {
         return "redirect:/admin/product/list";
     }
 
+    public void setModelCreate(Model model) {
+        model.addAttribute("cpuList", ProductSelectConstant.cpuList);
+        model.addAttribute("vgaList", ProductSelectConstant.vgaList);
+        model.addAttribute("targetList", ProductSelectConstant.targetList);
+        model.addAttribute("factoryList", ProductSelectConstant.factoryList);
+        model.addAttribute("statusList", ProductSelectConstant.statusList);
+    }
 }

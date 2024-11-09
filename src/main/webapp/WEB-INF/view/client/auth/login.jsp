@@ -38,7 +38,7 @@
                                         </c:if>
 
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" type="email"
+                                            <input class="form-control" type="text"
                                                 placeholder="name@example.com" name="username" />
                                             <label>Email address</label>
                                         </div>
