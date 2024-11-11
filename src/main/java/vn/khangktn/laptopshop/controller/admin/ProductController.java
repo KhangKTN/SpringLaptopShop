@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 import vn.khangktn.laptopshop.constant.DefaultMessageConstant;
@@ -51,15 +52,19 @@ public class ProductController {
     public String getCreateProductPage(Model model) {
         model.addAttribute("product", new Product());
         setModelCreate(model);
+        // model.addAttribute(mo, model)
         return "admin/product/create";
     }
 
     @PostMapping("create")
     public String createProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
-        @RequestParam("productImg") MultipartFile file, Model model)
+        @RequestParam("productImg") MultipartFile file, Model model, RedirectAttributes ra)
     {
         if (file.isEmpty()) {
             bindingResult.addError(new FieldError("productImg", "image", "Image is required!"));
+        }
+        if (product.getSlug() != null && productService.getBySlug(product.getSlug()) != null) {
+            bindingResult.addError(new FieldError("productSlug", "slug", "Slug is exists!"));
         }
         if (bindingResult.hasErrors()) {
             setModelCreate(model);
@@ -68,15 +73,20 @@ public class ProductController {
             }
             return "admin/product/create";
         }
+        
         boolean isSuccess = productService.createProduct(product, file);
-        model.addAttribute("message", isSuccess ? DefaultMessageConstant.CREATE_PRODUCT_SUCCESS : DefaultMessageConstant.CREATE_PRODUCT_FAIL);
+        if (isSuccess) {
+            ra.addFlashAttribute("success", DefaultMessageConstant.SAVE_PRODUCT_SUCCESS);
+        } else {
+            ra.addFlashAttribute("error", DefaultMessageConstant.SAVE_PRODUCT_SUCCESS);
+        }
         return "redirect:/admin/product/create";
     }
 
     @GetMapping("update/{id}")
     public String getPageUpdateProduct(@PathVariable("id") Long id, Model model) {
         model.addAttribute("product", productService.getById(id));
-        return "admin/product/update";
+        return "admin/product/create";
     }
 
     @PostMapping("update")
@@ -97,5 +107,6 @@ public class ProductController {
         model.addAttribute("targetList", ProductSelectConstant.targetList);
         model.addAttribute("factoryList", ProductSelectConstant.factoryList);
         model.addAttribute("statusList", ProductSelectConstant.statusList);
+        model.addAttribute("storageList", ProductSelectConstant.storageList);
     }
 }

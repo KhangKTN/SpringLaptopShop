@@ -66,28 +66,49 @@ public class ProductService {
         } else if ("gia-tang-dan".equals(sortBy)) {
             sort = Sort.by(Direction.ASC, Product_.PRICE.toString());
         }
-        Pageable pageable = PageRequest.of(0, 10, sort);
+        Pageable pageable = PageRequest.of(0, 20, sort);
 
         String productName = productSearchDTO.getName();
+        Specification<Product> specCur = null;
         if (productName != null) {
-            Specification<Product> specName = productSpecification.productNameContain(productName);
-            spec = spec.and(specName);
+            specCur = productSpecification.productNameContain(productName);
+            spec = spec.and(specCur);
         }
         if (productSearchDTO.getTarget() != null) {
-            Specification<Product> specTarget = productSpecification.productTargetIn(productSearchDTO.getTarget());
-            spec = spec.and(specTarget);
+            specCur = productSpecification.productTargetIn(productSearchDTO.getTarget());
+            spec = spec.and(specCur);
         }
-        if (productSearchDTO.getBrand() != null) {
-            Specification<Product> specBrand = productSpecification.productBrandIn(productSearchDTO.getBrand());
-            spec = spec.and(specBrand);
+        if (productSearchDTO.getFactory() != null) {
+            specCur = productSpecification.productBrandIn(productSearchDTO.getFactory());
+            spec = spec.and(specCur);
         }
         if (productSearchDTO.getPrice() != null) {
             List<String> priceList = productSearchDTO.getPrice();
-            Specification<Product> specPrice = Specification.where(null);
+            specCur = Specification.where(null);
             for (String price : priceList) {
-                specPrice = specPrice.or(productSpecification.productPriceRange(price));
+                specCur = specCur.or(productSpecification.productPriceRange(price));
             }   
-            spec = spec.and(specPrice);
+            spec = spec.and(specCur);
+        }
+        if (productSearchDTO.getCpu() != null) {
+            specCur = productSpecification.productCpuIn(productSearchDTO.getCpu());
+            spec = spec.and(specCur);
+        }
+        if (productSearchDTO.getVga() != null) {
+            specCur = productSpecification.productVgaIn(productSearchDTO.getVga());
+            spec = spec.and(specCur);
+        }
+        if (productSearchDTO.getRam() != null) {
+            specCur = productSpecification.productRam(productSearchDTO.getRam());
+            spec = spec.and(specCur);
+        }
+        if (productSearchDTO.getScreen() != null) {
+            List<String> screenList = productSearchDTO.getScreen();
+            specCur = Specification.where(null);
+            for (String screen : screenList) {
+                specCur = specCur.or(productSpecification.productScreen(screen));
+            }   
+            spec = spec.and(specCur);
         }
         
         return productRepository.findAll(spec, pageable);

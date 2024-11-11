@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title> Sản Phẩm - Laptopshop</title>
+    <title>Sản Phẩm - Laptopshop</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -44,6 +44,22 @@
         #btnClear:hover{
             color: red !important;
         }
+
+        .productName {
+            margin-bottom: 12px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+
+            @supports (-webkit-line-clamp: 2) {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: initial;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+        }
     </style>
 </head>
 
@@ -73,92 +89,46 @@
                 </div>
 
                 <div class="row g-4 fruite">
+                    <!-- Filter -->
                     <div class="col-12 col-md-3">
                         <div class="row g-4">
+                            <!-- Factory filter -->
                             <div class="col-12" id="factoryFilter">
                                 <div class="mb-2"><b>Hãng sản xuất</b></div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="factory-0"
+                                    <input class="form-check-input default-check" type="checkbox" id="factory"
                                         value="">
-                                    <label class="form-check-label" for="factory-0">Tất cả</label>
+                                    <label class="form-check-label user-select-none" for="factory">Tất cả</label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="factory-1"
-                                        value="APPLE">
-                                    <label class="form-check-label" for="factory-1">Apple</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="factory-2"
-                                        value="ASUS">
-                                    <label class="form-check-label" for="factory-2">Asus</label>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="factory-3"
-                                        value="LENOVO">
-                                    <label class="form-check-label" for="factory-3">Lenovo</label>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="factory-4"
-                                        value="DELL">
-                                    <label class="form-check-label" for="factory-4">Dell</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="factory-5"
-                                        value="LG">
-                                    <label class="form-check-label" for="factory-5">LG</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="factory-6"
-                                        value="ACER">
-                                    <label class="form-check-label" for="factory-6">Acer</label>
-                                </div>
-
+                                <c:forEach varStatus="loop" var="factory" items="${factoryList}">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="factory${loop.index}"
+                                            value="${factory.key}">
+                                        <label class="form-check-label user-select-none" for="factory${loop.index}">${factory.value}</label>
+                                    </div>
+                                </c:forEach>
                             </div>
+                            <!-- Target filter -->
                             <div class="col-12" id="targetFilter">
                                 <div class="mb-2"><b>Mục đích sử dụng</b></div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="target-0"
+                                    <input class="form-check-input default-check" type="checkbox" id="target-0"
                                         value="">
                                     <label class="form-check-label" for="target-0">Tất cả</label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="target-1"
-                                        value="GAMING">
-                                    <label class="form-check-label" for="target-1">Gaming</label>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="target-2"
-                                        value="SINHVIEN-VANPHONG">
-                                    <label class="form-check-label" for="target-2">Sinh viên - văn
-                                        phòng</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="target-3"
-                                        value="THIET-KE-DO-HOA">
-                                    <label class="form-check-label" for="target-3">Thiết kế đồ
-                                        họa</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="target-4"
-                                        value="MONG-NHE">
-                                    <label class="form-check-label" for="target-4">Mỏng nhẹ</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="target-5"
-                                        value="DOANH-NHAN">
-                                    <label class="form-check-label" for="target-5">Doanh nhân</label>
-                                </div>
-
-
+                                <c:forEach varStatus="loop" var="target" items="${targetList}">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="target${loop.index}"
+                                            value="${target.key}">
+                                        <label class="form-check-label" for="target${loop.index}">${target.value}</label>
+                                    </div>
+                                </c:forEach>
                             </div>
+                            <!-- Price filter -->
                             <div class="col-12" id="priceFilter">
                                 <div class="mb-2"><b>Mức giá</b></div>
-
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="price-0"
+                                    <input class="form-check-input default-check" type="checkbox" id="price-0"
                                         value="">
                                     <label class="form-check-label" for="price-0">Tất cả</label>
                                 </div>
@@ -188,6 +158,87 @@
                                     <label class="form-check-label" for="price-5">Trên 20 triệu</label>
                                 </div>
                             </div>
+                            <!-- CPU filter -->
+                            <div class="col-12" id="cpuFilter">
+                                <div class="mb-2"><b>Công nghệ CPU</b></div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input default-check" type="checkbox" id="cpu"
+                                        value="">
+                                    <label class="form-check-label" for="cpu">Tất cả</label>
+                                </div>
+                                <c:forEach varStatus="loop" var="cpu" items="${cpuList}">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="cpu${loop.index}"
+                                            value="${cpu.key}">
+                                        <label class="form-check-label" for="cpu${loop.index}">${cpu.value}</label>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <!-- Card filter -->
+                            <div class="col-12" id="vgaFilter">
+                                <div class="mb-2"><b>Card đồ hoạ</b></div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input default-check" type="checkbox" id="vga"
+                                        value="">
+                                    <label class="form-check-label" for="vga">Tất cả</label>
+                                </div>
+                                <c:forEach varStatus="loop" var="vga" items="${vgaList}">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="vga${loop.index}"
+                                            value="${vga.key}">
+                                        <label class="form-check-label" for="vga${loop.index}">${vga.value}</label>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <!-- Ram filter -->
+                            <div class="col-12" id="ramFilter">
+                                <div class="mb-2"><b>RAM</b></div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input default-check" type="checkbox" id="ram"
+                                        value="">
+                                    <label class="form-check-label" for="ram">Tất cả</label>
+                                </div>
+                                <c:forEach varStatus="loop" var="ram" items="${ramList}">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ram${loop.index}"
+                                            value="${ram.key}">
+                                        <label class="form-check-label" for="ram${loop.index}">${ram.value}</label>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <!-- Storage filter -->
+                            <div class="col-12" id="storageFilter">
+                                <div class="mb-2"><b>Ổ cứng</b></div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input default-check" type="checkbox" id="storage"
+                                        value="">
+                                    <label class="form-check-label" for="storage">Tất cả</label>
+                                </div>
+                                <c:forEach varStatus="loop" var="storage" items="${storageList}">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="storage${loop.index}"
+                                            value="${storage.key}">
+                                        <label class="form-check-label" for="storage${loop.index}">${storage.value}</label>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <!-- Screen size filter -->
+                            <div class="col-12" id="screenFilter">
+                                <div class="mb-2"><b>Kích thước màn hình</b></div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input default-check" type="checkbox" id="screen"
+                                        value="">
+                                    <label class="form-check-label" for="screen">Tất cả</label>
+                                </div>
+                                <c:forEach varStatus="loop" var="screen" items="${screenSizeList}">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="screen${loop.index}"
+                                            value="${screen.key}">
+                                        <label class="form-check-label" for="screen${loop.index}">${screen.value}</label>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <!-- Sort -->
                             <div class="col-12" id="sortBy">
                                 <div class="mb-2"><b>Sắp xếp</b></div>
 
@@ -222,6 +273,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Show list product -->
                     <div class="col-12 col-md-9 text-center">
                         <div class="row g-4">
                             <c:if test="${totalPages ==  0}">
@@ -235,19 +287,14 @@
                                             <img src="/images/product/${product.image}"
                                                 class="img-fluid w-100 rounded-top" alt="">
                                         </div>
-                                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                            style="top: 10px; left: 10px;">Laptop
+                                        <div class="text-white text-capitalize bg-secondary px-3 py-1 rounded position-absolute"
+                                            style="top: 10px; left: 10px;">${product.factory}
                                         </div>
                                         <div
-                                            class="p-4 rounded-bottom product-name">
-                                            <h4 style="font-size: 15px;">
-                                                <a href="/product/${product.id}">
-                                                    ${product.name}
-                                                </a>
-
-                                            </h4>
-                                            <p style="font-size: 13px;">
-                                                ${product.shortDesc}</p>
+                                            class="p-2 pb-3 rounded-bottom product-name">
+                                            <a class="productName" href="/product/${product.slug}">
+                                                ${product.name}
+                                            </a>
                                             <div
                                                 class="d-flex  flex-lg-wrap justify-content-center flex-column">
                                                 <p style="font-size: 15px; text-align: center; width: 100%;"
@@ -326,5 +373,15 @@
 
     <!-- Template Javascript -->
     <script src="/client/js/main.js"></script>
+    <script>
+        $('input.default-check').change(function () {
+            const isChecked = $(this).prop('checked')
+            if (isChecked) {
+                $(this).parent().siblings().find('input').each(function () {
+                    $(this).prop('checked', false)
+                })
+            }
+        })
+    </script>
 </body>
 </html>

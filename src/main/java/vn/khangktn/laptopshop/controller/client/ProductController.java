@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import vn.khangktn.laptopshop.constant.ProductSelectConstant;
 import vn.khangktn.laptopshop.domain.Product;
 import vn.khangktn.laptopshop.domain.dto.ProductSearchDTO;
 import vn.khangktn.laptopshop.service.ProductService;
@@ -32,7 +33,19 @@ public class ProductController {
     public String showAllProduct(Model model, ProductSearchDTO productSearch) {
         Page<Product> pageProduct = productService.getAllProductCondition(productSearch);
         model.addAttribute("productList", pageProduct.getContent().size() > 0 ? pageProduct.getContent() : new ArrayList<Product>());
-
+        model.addAttribute("totalPages", pageProduct.getTotalPages());
+        setModelFilter(model);
         return "client/product/list";
+    }
+
+    public void setModelFilter(Model model) {
+        model.addAttribute("cpuList", ProductSelectConstant.cpuList);
+        model.addAttribute("vgaList", ProductSelectConstant.vgaList);
+        model.addAttribute("targetList", ProductSelectConstant.targetList);
+        model.addAttribute("factoryList", ProductSelectConstant.factoryList);
+        model.addAttribute("statusList", ProductSelectConstant.statusList);
+        model.addAttribute("storageList", ProductSelectConstant.storageList);
+        model.addAttribute("ramList", ProductSelectConstant.ramList);
+        model.addAttribute("screenSizeList", ProductSelectConstant.screenSizeList);
     }
 }

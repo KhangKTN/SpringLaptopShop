@@ -209,39 +209,22 @@
     // Handle search param from URL
     function setQueryParam() {
         // Get search param
+        const listFilter = ['factory', 'target', 'price', 'cpu', 'vga', 'ram', 'storage', 'screen']
         const urlParams = new URLSearchParams(window.location.search);
-        let brandList = urlParams.get('brand')?.split(',') || []
-        let targetList = urlParams.get('target')?.split(',')  || []
-        let priceList = urlParams.get('price')?.split(',') || []
-        let sortBy = urlParams.get('sortBy') || ''
 
-        if (brandList.length > 0) {
-            $('#factoryFilter input').each(function () {
-                if (brandList.includes($(this).val())) {
-                    $(this).prop('checked', true)
-                }
-            })
-        } else {
-            $('#factoryFilter input').first().prop('checked', true)
-        }
-        if (targetList.length > 0) {
-            $('#targetFilter input').each(function () {
-                if (targetList.includes($(this).val())) {
-                    $(this).prop('checked', true)
-                }
-            })
-        } else {
-            $('#targetFilter input').first().prop('checked', true)
-        }
-        if (priceList.length > 0) {
-            $('#priceFilter input').each(function () {
-                if (priceList.includes($(this).val())) {
-                    $(this).prop('checked', true)
-                }
-            })
-        } else {
-            $('#priceFilter input').first().prop('checked', true)
-        }
+        listFilter.forEach(filter => {
+            const arr = urlParams.get(filter)?.split(',') || []
+            if (arr.length > 0) {
+                $(`#${filter}Filter input`).each(function () {
+                    if (arr.includes($(this).val())) {
+                        $(this).prop('checked', true)
+                    }
+                })
+            } else {
+                $(`#${filter}Filter input`).first().prop('checked', true)
+            }
+        });
+        
         $(`#sortBy input[name="radio-sort"]`).val([sortBy])
 
         $('input[type=checkbox]').change(function () {
@@ -253,41 +236,21 @@
 
         // Set search param on URL when click filter
         $('#btnFilter').on('click', function () {
-            brandList = []
-            targetList = []
-            priceList = []
-            $('#factoryFilter input:checked').each(function () {
-                const value = $(this).val()
-                if (value.length !== 0) {
-                    brandList.push(value)
-                }
-            })
-    
-            $('#targetFilter input:checked').each(function () {
-                const value = $(this).val()
-                if (value.length !== 0) {
-                    targetList.push(value)
-                }
-            })
-    
-            $('#priceFilter input:checked').each(function () {
-                const value = $(this).val()
-                if (value.length !== 0) {
-                    priceList.push(value)
-                }
-            })
+            const queryParam = []
 
-            let queryParam = []
+            listFilter.forEach(filter => {
+                const arr = []
+                $(`#${filter}Filter input:checked`).each(function () {
+                    const value = $(this).val().trim()
+                    if (value.length !== 0) {
+                        arr.push(value)
+                    }
+                })
+                if (arr.length > 0) {
+                    queryParam.push(`${filter}=${arr.join(',')}`)
+                }
+            })
             const sortValue = $('#sortBy input:checked').val()
-            if (brandList.length > 0) {
-                queryParam.push(`brand=${brandList.join(',')}`)
-            }
-            if (targetList.length > 0) {
-                queryParam.push(`target=${targetList.join(',')}`)
-            }
-            if (priceList.length > 0) {
-                queryParam.push(`price=${priceList.join(',')}`)
-            }
             if (sortValue !== '') {
                 queryParam.push(`sortBy=${sortValue}`)
             }
@@ -300,7 +263,6 @@
         })
     }
     setQueryParam()
-
 
     // Button reset filter
     $('#btnClear').click(function () {

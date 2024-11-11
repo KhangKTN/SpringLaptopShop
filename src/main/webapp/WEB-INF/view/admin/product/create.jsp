@@ -3,13 +3,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
-    <meta name="author" content="Hỏi Dân IT" />
+    <meta name="description" content="KhangKTN - Dự án laptopshop" />
+    <meta name="author" content="KhangKTN" />
     <title>Create Product</title>
     <link href="/css/styles.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -29,6 +28,7 @@
 <body class="sb-nav-fixed">
     <jsp:include page="../layout/header.jsp" />
     <div id="layoutSidenav">
+        <jsp:include page="../../common/alert.jsp" />
         <jsp:include page="../layout/sidebar.jsp" />
         <div id="layoutSidenav_content">
             <main>
@@ -46,7 +46,7 @@
                                     enctype="multipart/form-data" modelAttribute="product">
                                     <div class="mb-3 col-12 col-md-6">
                                         <label class="form-label fw-semibold">Name:</label>
-                                        <form:textarea rows="2" type="text" class="form-control" path="name"/>
+                                        <form:textarea rows="2" type="text" class="form-control" path="name" autofocus="autofocus"/>
                                         <form:errors class="text-danger" path="name"/>
                                     </div>
                                     <div class="mb-3 col-12 col-md-6">
@@ -116,7 +116,12 @@
                                     </div>
                                     <div class="mb-3 col-12 col-md-3">
                                         <label class="form-label fw-semibold">Storage:</label>
-                                        <form:input type="number" class="form-control" path="storage"/>
+                                        <form:select class="form-select" path="storage">
+                                            <form:option value="">-- Choose --</form:option>
+                                            <c:forEach var="storage" items="${storageList}">
+                                                <form:option value="${storage.key}">${storage.value}</form:option>
+                                            </c:forEach>
+                                        </form:select>
                                         <form:errors class="text-danger" path="ram"/>
                                     </div>
                                     <div class="mb-3 col-12 col-md-3">
@@ -126,7 +131,7 @@
                                     </div>
                                     <div class="mb-3 col-12 col-md-3">
                                         <label class="form-label fw-semibold">Screen:</label>
-                                        <form:input type="number" class="form-control" path="screen"/>
+                                        <form:input type="number" class="form-control" path="screen" step="0.1" onchange="setTwoNumberDecimal"/>
                                         <form:errors class="text-danger" path="screen"/>
                                     </div>
                                     <div class="mb-3 col-12 col-md-3">
@@ -193,6 +198,24 @@
                 $('textarea[name=slug]').val(getSlugify($(this).val()))
             })
         });
+
+        function setTwoNumberDecimal(event) {
+            this.value = parseFloat(this.value).toFixed(1);
+        }
+
+        $('input[type=number]').focusin(function () {
+            const value = $(this).val().trim()
+            if (value === '0' || value === '0.0') {
+                $(this).val('')
+            }
+        })
+
+        $('input[type=number]').focusout(function () {
+            const value = $(this).val().trim()
+            if (value === '') {
+                $(this).val(0)
+            }
+        })
     </script>
 </body>
 </html>

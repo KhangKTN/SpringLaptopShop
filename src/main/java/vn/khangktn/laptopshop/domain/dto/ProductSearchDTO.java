@@ -9,8 +9,13 @@ import lombok.Setter;
 public class ProductSearchDTO {
     String page;
     String name;
-    List<String> brand;
+    List<String> factory;
     List<String> target;
     List<String> price;
+    List<String> cpu;
+    List<String> vga;
+    List<String> ram;
+    List<String> storage;
+    List<String> screen;
     String sortBy;
 }
