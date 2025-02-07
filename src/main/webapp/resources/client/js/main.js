@@ -39,7 +39,7 @@
     }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        $('html, body').animate({scrollTop: 0}, 100, 'easeInOutExpo');
         return false;
     });
 
@@ -225,13 +225,25 @@
             }
         });
         
-        $(`#sortBy input[name="radio-sort"]`).val([sortBy])
+        $(`#sortSelect`).val(urlParams.get('sortBy') || '').change()
 
         $('input[type=checkbox]').change(function () {
             const checkbox = $(this)
             if (checkbox.val() !== '') {
                 $(this).parent().siblings('.form-check').first().find('input').prop('checked', false)
             }
+        })
+
+        // Handle click sort
+        $('#sortSelect').change(function () {
+            const value = $(this).val()
+            if (value) {
+                urlParams.set('sortBy', value)
+            } else {
+                urlParams.delete('sortBy')
+            }
+            const urlString = urlParams.toString().length > 0 ? `?${urlParams.toString()}` : urlParams.toString()
+            window.location.replace(window.location.href.split('?')[0] + urlString)
         })
 
         // Set search param on URL when click filter
@@ -250,9 +262,8 @@
                     queryParam.push(`${filter}=${arr.join(',')}`)
                 }
             })
-            const sortValue = $('#sortBy input:checked').val()
-            if (sortValue !== '') {
-                queryParam.push(`sortBy=${sortValue}`)
+            if (urlParams.get('sortBy')) {
+                queryParam.push('sortBy=' + urlParams.get('sortBy'))
             }
 
             let queryUrl = window.location.href.split('?')[0]

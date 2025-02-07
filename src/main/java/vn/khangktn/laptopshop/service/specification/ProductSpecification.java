@@ -21,7 +21,7 @@ public class ProductSpecification {
         put("tren-20-trieu", new long[]{20, 9999});
     }};
 
-    public static final Map<String, float[]> SCREEN_LIST = new HashMap<>(){{
+    public final Map<String, float[]> SCREEN_LIST = new HashMap<>(){{
         put("duoi-14-inch", new float[]{0, 13.9f});
         put("14-15-inch", new float[]{14, 15});
         put("15-17-inch", new float[]{15, 17});
@@ -64,6 +64,10 @@ public class ProductSpecification {
     public Specification<Product> productScreen(String screenUrl) {
         float[] screenArr = getScreenSizeRange(screenUrl);
         return (root, query, builder) -> builder.between(root.get(Product_.SCREEN), screenArr[0], screenArr[1]);
+    }
+
+    public Specification<Product> productStorage(List<String> storageList) {
+        return (root, query, builder) -> builder.in(root.get(Product_.STORAGE)).value(storageList);
     }
 
     private long[] getPriceRange(String priceUrl) {

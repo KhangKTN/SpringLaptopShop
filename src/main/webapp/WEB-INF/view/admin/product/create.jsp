@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="KhangKTN - Dự án laptopshop" />
+    <meta name="description" content="Admin - T&T Laptop" />
     <meta name="author" content="KhangKTN" />
     <title>Create Product</title>
     <link href="/css/styles.css" rel="stylesheet" />

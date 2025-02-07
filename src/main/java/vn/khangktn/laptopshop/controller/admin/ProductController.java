@@ -52,7 +52,7 @@ public class ProductController {
     public String getCreateProductPage(Model model) {
         model.addAttribute("product", new Product());
         setModelCreate(model);
-        // model.addAttribute(mo, model)
+        model.addAttribute("success", "Error");
         return "admin/product/create";
     }
 

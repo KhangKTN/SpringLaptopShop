@@ -21,4 +21,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     @NonNull
     Page<Product> findAll(@NonNull Specification<Product> specs, @NonNull Pageable pageable);
+
+    List<Product> findByFactory(String factory, Pageable pageable);
 }

@@ -1,6 +1,8 @@
 package vn.khangktn.laptopshop.service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,16 +59,36 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public Page<Product> getAllProductCondition(ProductSearchDTO productSearchDTO) {
-        Specification<Product> spec = Specification.where(null);
+    public Map<String, List<Product>> getProductByFactories() {
+        Map<String, List<Product>> productMap = new LinkedHashMap<>();
+        Pageable pageable = PageRequest.of(0, 6);
+        productMap.put("Macbook", productRepository.findByFactory("apple", pageable));
+        productMap.put("Laptop Dell", productRepository.findByFactory("dell", pageable));
+        productMap.put("Laptop HP", productRepository.findByFactory("hp", pageable));
+        productMap.put("Laptop MSI", productRepository.findByFactory("msi", pageable));
+        return productMap;
+    }
+
+    public Sort sortProduct(String sortBy) {
         Sort sort = Sort.unsorted();
-        String sortBy = productSearchDTO.getSortBy();
+        if (sortBy != null && sortBy.isEmpty()) {
+            return sort;
+        }
         if ("gia-giam-dan".equals(sortBy)) {
             sort = Sort.by(Direction.DESC, Product_.PRICE.toString());
         } else if ("gia-tang-dan".equals(sortBy)) {
             sort = Sort.by(Direction.ASC, Product_.PRICE.toString());
+        } else if ("ten-az".equals(sortBy)) {
+            sort = Sort.by(Direction.ASC, Product_.NAME.toString());
+        } else if ("ten-za".equals(sortBy)) {
+            sort = Sort.by(Direction.DESC, Product_.NAME.toString());
         }
-        Pageable pageable = PageRequest.of(0, 20, sort);
+        return sort;
+    }
+
+    public Page<Product> getAllProductCondition(ProductSearchDTO productSearchDTO) {
+        Specification<Product> spec = Specification.where(null);
+        Pageable pageable = PageRequest.of(0, 20, sortProduct(productSearchDTO.getSortBy()));
 
         String productName = productSearchDTO.getName();
         Specification<Product> specCur = null;
@@ -100,6 +122,10 @@ public class ProductService {
         }
         if (productSearchDTO.getRam() != null) {
             specCur = productSpecification.productRam(productSearchDTO.getRam());
+            spec = spec.and(specCur);
+        }
+        if (productSearchDTO.getStorage() != null) {
+            specCur = productSpecification.productStorage(productSearchDTO.getStorage());
             spec = spec.and(specCur);
         }
         if (productSearchDTO.getScreen() != null) {

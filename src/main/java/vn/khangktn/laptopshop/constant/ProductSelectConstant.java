@@ -1,5 +1,6 @@
 package vn.khangktn.laptopshop.constant;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -69,5 +70,19 @@ public class ProductSelectConstant {
         put("duoi-14-inch", "Dưới 14 inch");
         put("14-15-inch", "Từ 14 - 15 inch");
         put("15-17-inch", "Từ 15 - 17 inch");
+    }};
+
+    public static final Map<String, String> PRICE_LIST = new HashMap<>() {{
+        put("duoi-10-trieu", "Dưới 10 triệu");
+        put("10-15-trieu", "Từ 10 - 15 triệu");
+        put("15-20-trieu", "Từ 15 - 20 triệu");
+        put("tren-20-trieu", "Trên 20 triệu");
+    }};
+
+    public static final Map<String, String> SORT_LIST = new LinkedHashMap<>() {{
+        put("gia-tang-dan", "Giá tăng dần");
+        put("gia-giam-dan", "Giá giảm dần");
+        put("ten-az", "Tên từ A-Z");
+        put("ten-za", "Tên từ Z-A");
     }};
 }

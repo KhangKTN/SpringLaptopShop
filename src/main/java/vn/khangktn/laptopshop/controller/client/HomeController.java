@@ -33,7 +33,7 @@ public class HomeController {
     public String getHomepageClient(Model model) {
         Page<Product> pageProduct = productService.getAllProduct(1);
         model.addAttribute("productList", pageProduct.getContent());
-
+        model.addAttribute("dataList", productService.getProductByFactories());
         return "client/home";
     }
 

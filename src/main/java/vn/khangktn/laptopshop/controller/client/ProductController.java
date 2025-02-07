@@ -47,5 +47,7 @@ public class ProductController {
         model.addAttribute("storageList", ProductSelectConstant.storageList);
         model.addAttribute("ramList", ProductSelectConstant.ramList);
         model.addAttribute("screenSizeList", ProductSelectConstant.screenSizeList);
+        model.addAttribute("priceList", ProductSelectConstant.PRICE_LIST);
+        model.addAttribute("sortList", ProductSelectConstant.SORT_LIST);
     }
 }
